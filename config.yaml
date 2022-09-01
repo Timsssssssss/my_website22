@@ -1,4 +1,4 @@
-baseURL: https://thangmam2023.netlify.app/
+baseURL: https://kostis-portfolio.netlify.app/
 languageCode: en-us
 title: Portfolio website for Tianyi ZHANG
 theme: forty
@@ -14,7 +14,7 @@ params:
   blog: {}
   contact:
     address: Flat 37 Ivor Court
-      - city: London, NW1 6BL
+      - city: London
         country: UK
         street: Baker Street
         title: Address
