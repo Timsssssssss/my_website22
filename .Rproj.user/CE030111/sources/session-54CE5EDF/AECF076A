@@ -3,7 +3,7 @@
     "path": "C:/Users/ty/Desktop/my_website22/config.yaml",
     "project_path": "config.yaml",
     "type": "yaml",
-    "hash": "1039088594",
+    "hash": "946510756",
     "contents": "",
     "dirty": false,
     "created": 1662060793820.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "0,0",
-        "scrollLine": "0"
+        "cursorPosition": "29,16",
+        "scrollLine": "17"
     },
     "folds": "",
-    "lastKnownWriteTime": 1662060828,
+    "lastKnownWriteTime": 1662061098,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1662060828583,
+    "last_content_update": 1662061098475,
     "read_only": false,
     "read_only_alternatives": []
 }
