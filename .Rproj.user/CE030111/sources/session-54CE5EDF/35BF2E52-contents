@@ -1,6 +1,6 @@
 baseURL: https://kostis-portfolio.netlify.app/
 languageCode: en-us
-title: Forty
+title: Portfolio website for Tianyi ZHANG
 theme: forty
 googleAnalytics: ''
 disqusShortname: ''
@@ -8,24 +8,24 @@ params:
   banner:
     buttonText: Get Started
     subtitle: |-
-      A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP
-      AND RELEASED UNDER THE CREATIVE COMMONS.
-    title: Hi, my name is Forty
+      #A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP
+      #AND RELEASED UNDER THE CREATIVE COMMONS.
+    title: Hi, my name is Tianyi Zhang
   blog: {}
   contact:
-    address:
-      - city: City, ST 00000
-        country: Country
-        street: Street
+    address: Flat 37 Ivor Court
+      - city: London
+        country: UK
+        street: Baker Street
         title: Address
     buttonClear: Clear
     buttonSend: Send message
     email:
-      - email: example@domain.com
+      - email: tzhang.mam2023@london.edu
         title: Email
     enable: yes
     phone:
-      - phone: (000) 000-0000 x1234
+      - phone: (000) 7421897465
         title: Phone
   custom_css: []
   custom_js: []
@@ -35,7 +35,7 @@ params:
     text: Please visit [this page](/)
   favicon: favicon.ico
   footer:
-    copyright: Company Name
+    copyright: Myself
     enable: yes
     quicklinks:
       - alt: HTML5 UP
