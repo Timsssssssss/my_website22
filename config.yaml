@@ -5,7 +5,7 @@ theme: forty
 googleAnalytics: ''
 disqusShortname: ''
 params:
-  banner:banner.jpg
+  banner:
     buttonText: Get Started
 #    subtitle: |-
 #      A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP
