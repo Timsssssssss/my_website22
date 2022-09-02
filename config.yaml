@@ -5,7 +5,7 @@ theme: forty
 googleAnalytics: ''
 disqusShortname: ''
 params:
-  banner:
+  banner:banner.jpg
     buttonText: Get Started
 #    subtitle: |-
 #      A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP
@@ -89,7 +89,7 @@ params:
 #        subtitle: Feugiat Amet Tempus
         title: Work Experience
         url: blogs/wk
-      - image: pic03.jpg
+      - image: pic03.avif
 #        subtitle: Lorem Etiam Nullam
         title: More about my self
         url: blogs/myself
