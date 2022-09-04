@@ -321,7 +321,6 @@ skimr::skim(rent)</code></pre>
 </tbody>
 </table>
 <p>Make a plot that shows the top 20 cities in terms of % of classifieds between 2000-2018. You need to calculate the number of listings by city, and then convert that number to a %.</p>
-<p>The final graph should look like this<img src="images/top_cities.png" /></p>
 <pre class="r"><code># Group by city and count
 rent %&gt;%
   group_by(city) %&gt;% 
@@ -339,8 +338,7 @@ rent %&gt;%
     theme(plot.title.position = &quot;plot&quot;)+
     scale_x_continuous(labels = scales::percent) #Transform the x-axis label into percentage</code></pre>
 <p><img src="/blogs/homework1_group8_files/figure-html/plot_top_cities-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>Make a plot that shows the evolution of median prices in San Francisco for 0, 1, 2, and 3 bedrooms listings. The final graph should look like this</p>
-<p><img src="images/sf_rentals.png" /></p>
+<p>Make a plot that shows the evolution of median prices in San Francisco for 0, 1, 2, and 3 bedrooms listings.</p>
 <pre class="r"><code>rent %&gt;% 
   filter(city==&quot;san francisco&quot;, beds %in% 0:3) %&gt;% 
   group_by(beds,year) %&gt;%
@@ -354,8 +352,7 @@ rent %&gt;%
   theme(legend.position = &quot;none&quot;)+ # hide the legends
   scale_color_manual(values = c(&quot;red&quot;,&quot;green&quot;,&quot;blue&quot;,&quot;purple&quot;))</code></pre>
 <p><img src="/blogs/homework1_group8_files/figure-html/sf_median_prices-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>Finally, make a plot that shows median rental prices for the top 12 cities in the Bay area. Your final graph should look like this</p>
-<p><img src="images/one_bed_bay_area.png" /></p>
+<p>Finally, make a plot that shows median rental prices for the top 12 cities in the Bay area.</p>
 <pre class="r"><code># find the top 12 cities 
 top_cities = rent %&gt;%
   group_by(city) %&gt;% 
@@ -377,10 +374,6 @@ rent %&gt;%
   labs(title=&quot;Rental prices for 1-bedroom flats in the Bay Area&quot;,x=NULL,y=NULL,caption = &quot;Source: Pennington, Kate (2018). Bay Area Craigslist Rental Housing Posts, 2010-2018&quot;)+
   theme(legend.position = &quot;none&quot;)# hide the legend</code></pre>
 <p><img src="/blogs/homework1_group8_files/figure-html/spirit_plot-1.png" width="768" style="display: block; margin: auto;" /></p>
-<p>What can you infer from these plots? Don’t just explain what’s in the graph, but speculate or tell a short story (1-2 paragraphs max).</p>
-<blockquote>
-<p>TYPE YOUR ANSWER AFTER (AND OUTSIDE!) THIS BLOCKQUOTE.</p>
-</blockquote>
 <p>First of all, San Francisco has the most listings among all the cities it the Bay Area. The reason behind this could be that San Francisco has a booming economy and is a popular location for large companies, such as Uber or Twitter. These companies recruit a lot outside of San Francisco, leading to a large influx in individuals requiring local accommodation. As the demand is high, supply follows suit. Smaller towns like Redwood City have low population and don’t draw nearly as many foreign settlers. Therefore, the number of listings is comparatively lower.</p>
 <p>The increase in rental prices between 2000 and 2018 in San Francisco is proportionally approximately the same between 0 to 3 bed listings. If there was a larger increase in families over that time frame, we could potentially see prices for 2 and 3 bedroom flats ascending more extremely given the increase demand. However, the demand seems to be equally balanced between all sizes. We should also not be surprised to see generally higher prices in San Francisco compared to other cities in the Bay Area. This is most likely a result of the popularity of the city for foreigners and the limited space available for additional housing, among others. By observing the price line charts for all cities in the Bay Area, we can see that all have experienced a rise in prices between 2000 and 2018. A natural increase over time is to be expected, given inflation. However we see more pronounced increases in some areas versus others, the reasons for which could be further investigated. An example would be Palo Alto, which is of course known for the Stanford Campus. Last but not least, the dip in 2008/2009 is worth mentioning. This is most likely a result of the financial crisis during that time. The difference in the gravity of the dip between cities provides some intriguing insights.</p>
 </div>
@@ -1596,8 +1589,7 @@ spotify_songs %&gt;%
 <div id="challenge-1-replicating-a-chart" class="section level1">
 <h1>Challenge 1: Replicating a chart</h1>
 <p>The purpose of this exercise is to reproduce a plot using your <code>dplyr</code> and <code>ggplot2</code> skills. It builds on exercise 1, the San Francisco rentals data.</p>
-<p>You have to create a graph that calculates the cumulative % change for 0-, 1-1, and 2-bed flats between 2000 and 2018 for the top twelve cities in Bay Area, by number of ads that appeared in Craigslist. Your final graph should look like this</p>
-<p><img src="images/challenge1.png" /></p>
+<p>You have to create a graph that calculates the cumulative % change for 0-, 1-1, and 2-bed flats between 2000 and 2018 for the top twelve cities in Bay Area, by number of ads that appeared in Craigslist.</p>
 <pre class="r"><code>rent %&gt;% 
   filter(beds %in% c(0,1,2),
          city %in% top_cities$city) %&gt;% 
@@ -1627,7 +1619,6 @@ spotify_songs %&gt;%
 <div id="challenge-2-2016-california-contributors-plots" class="section level1">
 <h1>Challenge 2: 2016 California Contributors plots</h1>
 <p>As discussed in class, I would like you to reproduce the plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election.</p>
-<p><img src="../../images/challenge2.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># Loading the data frames and assigning them to variables
 CA_contributors_2016 &lt;- vroom::vroom(here::here(&quot;data&quot;,&quot;CA_contributors_2016.csv&quot;))
 zip_code_database &lt;- vroom::vroom(here::here(&quot;data&quot;,&quot;zip_code_database.csv&quot;))
@@ -1660,26 +1651,4 @@ top_contributing_cities %&gt;%
   theme_bw() + 
   labs(y = &quot;Amount raised&quot;, x = NULL, title = &quot;Where did candidates raise most money?&quot;)</code></pre>
 <p><img src="/blogs/homework1_group8_files/figure-html/load_CA_data-1.png" width="768" style="display: block; margin: auto;" /></p>
-</div>
-<div id="deliverables" class="section level1">
-<h1>Deliverables</h1>
-<p>There is a lot of explanatory text, comments, etc. You do not need these, so delete them and produce a stand-alone document that you could share with someone. Knit the edited and completed R Markdown file as an HTML document (use the “Knit” button at the top of the script editor window) and upload it to Canvas.</p>
-</div>
-<div id="details" class="section level1">
-<h1>Details</h1>
-<ul>
-<li>Who did you collaborate with: Christoph Plachutta, Misha Aggarwal, Madalina Dumitrescu, Yung-Chieh Hsu, Wendy Li, Tianyi Zhang</li>
-<li>Approximately how much time did you spend on this problem set: 5 hours each</li>
-<li>What, if anything, gave you the most trouble: Challenge 2</li>
-</ul>
-<p><strong>Please seek out help when you need it,</strong> and remember the <a href="https://mam2022.netlify.app/syllabus/#the-15-minute-rule" target="_blank">15-minute rule</a>. You know enough R (and have enough examples of code from class and your readings) to be able to do this. If you get stuck, ask for help from others, post a question on Slack– and remember that I am here to help too!</p>
-<blockquote>
-<p>As a true test to yourself, do you understand the code you submitted and are you able to explain it to someone else?</p>
-</blockquote>
-</div>
-<div id="rubric" class="section level1">
-<h1>Rubric</h1>
-<p>Check minus (1/5): Displays minimal effort. Doesn’t complete all components. Code is poorly written and not documented. Uses the same type of plot for each graph, or doesn’t use plots appropriate for the variables being analyzed.</p>
-<p>Check (3/5): Solid effort. Hits all the elements. No clear mistakes. Easy to follow (both the code and the output).</p>
-<p>Check plus (5/5): Finished all components of the assignment correctly and addressed both challenges. Code is well-documented (both self-documented and with additional comments as necessary). Used tidyverse, instead of base R. Graphs and tables are properly labelled. Analysis is clear and easy to follow, either because graphs are labeled clearly or you’ve written additional text to describe how you interpret the output.</p>
 </div>

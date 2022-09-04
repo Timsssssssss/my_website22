@@ -60,7 +60,6 @@ skimr::skim(rent)
 
 Make a plot that shows the top 20 cities in terms of % of classifieds between 2000-2018. You need to calculate the number of listings by city, and then convert that number to a %.
 
-The final graph should look like this![](images/top_cities.png)
 
 ```{r plot_top_cities}
 # Group by city and count
@@ -81,9 +80,7 @@ rent %>%
     scale_x_continuous(labels = scales::percent) #Transform the x-axis label into percentage
 ```
 
-Make a plot that shows the evolution of median prices in San Francisco for 0, 1, 2, and 3 bedrooms listings. The final graph should look like this
-
-![](images/sf_rentals.png)
+Make a plot that shows the evolution of median prices in San Francisco for 0, 1, 2, and 3 bedrooms listings.
 
 ```{r sf_median_prices}
 
@@ -102,9 +99,7 @@ rent %>%
 
 ```
 
-Finally, make a plot that shows median rental prices for the top 12 cities in the Bay area. Your final graph should look like this
-
-![](images/one_bed_bay_area.png)
+Finally, make a plot that shows median rental prices for the top 12 cities in the Bay area.
 
 ```{r spirit_plot}
 # find the top 12 cities 
@@ -128,10 +123,6 @@ rent %>%
   labs(title="Rental prices for 1-bedroom flats in the Bay Area",x=NULL,y=NULL,caption = "Source: Pennington, Kate (2018). Bay Area Craigslist Rental Housing Posts, 2010-2018")+
   theme(legend.position = "none")# hide the legend
 ```
-
-What can you infer from these plots? Don't just explain what's in the graph, but speculate or tell a short story (1-2 paragraphs max).
-
-> TYPE YOUR ANSWER AFTER (AND OUTSIDE!) THIS BLOCKQUOTE.
 
 First of all, San Francisco has the most listings among all the cities it the Bay Area. The reason behind this could be that San Francisco has a booming economy and is a popular location for large companies, such as Uber or Twitter. These companies recruit a lot outside of San Francisco, leading to a large influx in individuals requiring local accommodation. As the demand is high, supply follows suit. Smaller towns like Redwood City have low population and don't draw nearly as many foreign settlers. Therefore, the number of listings is comparatively lower.
 
@@ -519,9 +510,7 @@ spotify_songs %>%
 
 The purpose of this exercise is to reproduce a plot using your `dplyr` and `ggplot2` skills. It builds on exercise 1, the San Francisco rentals data.
 
-You have to create a graph that calculates the cumulative % change for 0-, 1-1, and 2-bed flats between 2000 and 2018 for the top twelve cities in Bay Area, by number of ads that appeared in Craigslist. Your final graph should look like this
-
-![](images/challenge1.png)
+You have to create a graph that calculates the cumulative % change for 0-, 1-1, and 2-bed flats between 2000 and 2018 for the top twelve cities in Bay Area, by number of ads that appeared in Craigslist.
 
 ```{r challenge1, out.width="100%"}
 
@@ -557,10 +546,6 @@ rent %>%
 # Challenge 2: 2016 California Contributors plots
 
 As discussed in class, I would like you to reproduce the plot that shows the top ten cities in highest amounts raised in political contributions in California during the 2016 US Presidential election.
-
-```{r challenge2, echo=FALSE, out.width="100%"}
-knitr::include_graphics(here::here("images", "challenge2.png"), error = FALSE)
-```
 
 ```{r, load_CA_data, warnings= FALSE, message=FALSE, fig.height = 4}
 # Loading the data frames and assigning them to variables

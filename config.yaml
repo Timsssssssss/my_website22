@@ -25,7 +25,7 @@ params:
         title: Email
     enable: yes
     phone:
-      - phone: (000) 7421897465
+      - phone: (440) 7421897465/ (86) 13501642653
         title: Phone
   custom_css: []
   custom_js: []
@@ -35,12 +35,7 @@ params:
     text: Please visit [this page](/)
   favicon: favicon.ico
   footer:
-    #copyright: Company Name
-    #enable: yes
-    #quicklinks:
-    #  - alt: HTML5 UP
-    #    text: 'Design: '
-    #    url: https://www.html5up.net
+    enable: yes
     social:
     #  - icon: fa-twitter
     #    label: Twitter
@@ -58,14 +53,14 @@ params:
         label: LinkedIn
         url: https://www.linkedin.com/in/tianyi-zhang-7a8b531b3
   image: ''
-  name: Your name
+  name: Tianyi Zhang
   navigation:
     button1:
       - name: Get Started
         url: blogs
-    button2:
-      - name: Log In
-        url: '#'
+#    button2:
+#      - name: Log In
+#        url: '#'
     links:
       - name: Home
         url: '#'
