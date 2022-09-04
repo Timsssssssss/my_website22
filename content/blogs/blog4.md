@@ -5,17 +5,19 @@ categories:
 date: "2017-10-31T22:42:51-05:00"
 description: Academic Background
 draft: false
-image: pic07.jpg
+image: lbs.jpg
 keywords: ""
 slug: ab
 title: Academic Background
 ---
-2022 - 2023 London Business School, London
-Reading for Masters in Analytics and Management
-Core Modules: Marketing for Big Data, Decision Analytics and Modeling, Business Strategy Analytics
-GRE: 327 (Equivalent GMAT Score: 730)
-2018 - 2022 The Chinese University of Hong Kong, Shenzhen, China
-BSc in Statistics, First Class Honours
-Major GPA: 3.74/4.0 (Rank: Top 5%); Cumulative GPA: 3.5/4.0 (Rank: Top 10%)
-Relevant courses: Machine Learning, Regression Analysis, Optimization, Time Series, Managerial Analytics
-Took summer school at UC Berkeley in 2019; Courses: Economics, Introduction to Data Science
+## London Business School
+- Masters in Analytics and Management
+- 2022.08 - 2023.08, London, United Kingdom 
+- Core Modules: Marketing for Big Data, Decision Analytics and Modeling, Business Strategy Analytics
+
+## The Chinese University of Hong Kong(Shenzhen)
+- BSc in Statistics, First Class Honours
+- 2018.09 - 2022.07, China
+- Major GPA: 3.74/4.0 (Rank: Top 5%); Cumulative GPA: 3.5/4.0 (Rank: Top 10%)
+- Relevant courses: Machine Learning, Regression Analysis, Optimization, Time Series, Managerial Analytics
+- Took summer school at UC Berkeley in 2019; Courses: Economics, Introduction to Data Science
