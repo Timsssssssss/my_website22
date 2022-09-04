@@ -10,7 +10,7 @@ params:
 #    subtitle: |-
 #      A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP
 #      AND RELEASED UNDER THE CREATIVE COMMONS.
-    title: Tianyi Zhang:CUHKSZ 2018; LBS MAM 2023
+    title: Tianyi Zhang: CUHKSZ 2018; LBS MAM 2023
   blog: {}
   contact:
     address:
@@ -87,9 +87,13 @@ params:
         url: blogs/ab
       - image: pic02.jpg
 #        subtitle: Feugiat Amet Tempus
-        title: Work Experience
+        title: My Career Narrative
         url: blogs/wk
-      - image: pic03.jpg
+      - image: data.jpg
 #        subtitle: Lorem Etiam Nullam
-        title: More about my self
-        url: blogs/myself
+        title: Project Example
+        url: blogs/proj1
+      - image: spices.jpg
+#        subtitle: Lorem Etiam Nullam
+        title: Risk-Return of DJIA stocks
+        url: blogs/risk_return
