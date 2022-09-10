@@ -5,31 +5,16 @@ categories:
 date: "2017-10-31T22:26:13-05:00"
 description: 
 draft: false
-image: pic08.jpg
+image: pic02.jpg
 keywords: ""
 slug: wk
-title: work experience
+title: My Career Narrative
 ---
-2022.02 - 06 THE GROWTHBOX, Shanghai
-Business Analyst
-• Studied different brand strategies to boost business growth; research areas included: digital 
-transformation, event marketing, membership systems and metaverse
-• Gathered related knowledge of each topic through paper reading and desk research; obtained key 
-information from over 20 expert interviews, summarized strategies and verified the hypothesis
-• Briefed editors about the research and interpreted key conclusions; co-authored 4 research reports with 
-a cumulative reading volume of more than 50,000
-2021.05 - 09 DANONE, Shanghai
-Advanced-Analytics Intern (Supply-Chain)
-• Built different machine learning models to predict products' future offtake; designed a new algorithm 
-where the model was divided into two stages and increased the accuracy by 5%
-• Discussed with the marketing/sales team to identify factors affecting the offtake; verified over 5 possible 
-leading indicators by Co-Integration test
-• Improved the prediction accuracy to 85% and controlled the YTD bias within 10%, outperformed the 
-baseline prediction
-2020.05 - 08 ORIENT SECURITIES RESEARCH INSTITUTE, Shanghai
-Intern Analyst
-• Collected financial information and business data of the designated companies from WIND, such as 
-business costs, project income, etc.; used Excel to merge information and key statistics
-• Updated industrial data weekly and wrote 9 reports; illustrated the impacts on companies’ operation
-• Assessed designated companies' operational condition and development strategy through conferences; 
-organized over 30 summaries for investors' review
+
+# My journey with data
+
+In 2019, I had summer school at UC Berkeley and took a course called Intro to Principles of Data Science, where i learnt about how to manipulate and analyze data through Pandas and implement basic regression analysis in Python. Walking through numerous interesting hands-on projects such as sentiment analysis of Trump's Twitter and a spam filter, I was fascinated by the power of data and would like to know the principles behind those models. 
+
+Therefore, I chose Statistics as my major during my undergraduate study. In the following 3 years, I acquired different statistical modeling skills such as time series, machine learning and stochastic process. I love to solve problems using data and always seeking opportunity to apply what I learn to real life. The initial motivation for me to pursue a career in analytics came from a favor I did when I was a sophomore. My father's friend, who worked in the Shanghai Fire Department, asked me to provide some ideas about the digital transformation project. I performed some analysis on historical conflagration data and built a random forest model to classify those cases into three levels. It was the first time that I had applied what I learnt in class to solve real-life problems and I enjoyed it. Hence, I started to think of being an analyst.
+
+So far, I have got hands on experience in using machine learning to predict future products' offtake at Danone, seeing how data is integrated into business context. At GrowthBox, I acquired valuable business knowledge about driving growth. Now, studying at LBS as a MAM student helps me dig deeper in the field of analytics, gainning more insights about how data facilitates business.

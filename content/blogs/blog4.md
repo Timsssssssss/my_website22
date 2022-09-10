@@ -21,3 +21,4 @@ title: Academic Background
 - Major GPA: 3.74/4.0 (Rank: Top 5%); Cumulative GPA: 3.5/4.0 (Rank: Top 10%)
 - Relevant courses: Machine Learning, Regression Analysis, Optimization, Time Series, Managerial Analytics
 - Took summer school at UC Berkeley in 2019; Courses: Economics, Introduction to Data Science
+- President of Football Club, 2019-2020
