@@ -88,7 +88,7 @@ params:
 #        subtitle: Lorem Etiam Nullam
         title: Project Example
         url: blogs/proj1
-      - image: spices.jpg
+#    - image: spices.jpg
 #        subtitle: Lorem Etiam Nullam
-        title: Risk-Return of DJIA stocks
-        url: blogs/risk_return
+#      title: Risk-Return of DJIA stocks
+#       url: blogs/risk_return
