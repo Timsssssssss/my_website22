@@ -50,8 +50,6 @@ library(openintro)
 This data is part of the `openintro` textbook and we can load and inspect it. There are observations on 13 different variables, some categorical and some numerical. The meaning of each variable can be found by bringing up the help file:
 
 ```{r inspect_yrbss}
-
-?yrbss
 data(yrbss)
 glimpse(yrbss)
 
@@ -59,9 +57,6 @@ glimpse(yrbss)
 
 ## Exploratory Data Analysis
 
-You will first start with analyzing the `weight` of participants in kilograms. 
-
-> Using visualization and summary statistics, describe the distribution of weights. 
 
 ```{r, distribution and summary statistics}
 # Retrieve overall summary statistics
@@ -722,24 +717,3 @@ The USA also displayed a shift of components, however here it concerns governmen
 
 Last but not least, let us look at Germany. Looking at the visualization of the data, we see the most stable distribution of GDP components over the years between the three countries. Germany has been able to reliably maintain a trade surplus over most years. Especially since 2000, trade seems to have become more central to Germany´s GDP. Such an observation is not entirely surprising, giving that Germany has a strong footing in most large sectors (e.g. agriculture, pharma) and enjoys strong demand for its machinery and vehicles. Meanwhile, household expenditure contributes less to the GDP than observed in the other countries. This does not mean that Germans spend less, but that the GDP of Germany is just more evenly distributed between its components.
 
-# Deliverables
-
-There is a lot of explanatory text, comments, etc. You do not need these, so delete them and produce a stand-alone document that you could share with someone. Knit the edited and completed R Markdown file as an HTML document (use the "Knit" button at the top of the script editor window) and upload it to Canvas.
-
-# Details
-
--   Who did you collaborate with: Group 8 Members
--   Approximately how much time did you spend on this problem set: 3 hours per group member
--   What, if anything, gave you the most trouble: Assessing the level of analysis required
-
-**Please seek out help when you need it,** and remember the [15-minute rule](https://mam2022.netlify.app/syllabus/#the-15-minute-rule){target="_blank"}. You know enough R (and have enough examples of code from class and your readings) to be able to do this. If you get stuck, ask for help from others, post a question on Slack-- and remember that I am here to help too!
-
-> As a true test to yourself, do you understand the code you submitted and are you able to explain it to someone else?
-
-# Rubric
-
-Check minus (1/5): Displays minimal effort. Doesn't complete all components. Code is poorly written and not documented. Uses the same type of plot for each graph, or doesn't use plots appropriate for the variables being analyzed.
-
-Check (3/5): Solid effort. Hits all the elements. No clear mistakes. Easy to follow (both the code and the output).
-
-Check plus (5/5): Finished all components of the assignment correctly and addressed both challenges. Code is well-documented (both self-documented and with additional comments as necessary). Used tidyverse, instead of base R. Graphs and tables are properly labelled. Analysis is clear and easy to follow, either because graphs are labeled clearly or you've written additional text to describe how you interpret the output.

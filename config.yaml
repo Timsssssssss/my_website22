@@ -88,7 +88,7 @@ params:
 #        subtitle: Lorem Etiam Nullam
         title: Project Example
         url: blogs/proj1
-     - image: brexit.jpg
-#      subtitle: Lorem Etiam Nullam
-       title: Project Example 2
-       url: blogs/proj2
+      - image: brexit.jpg
+#       subtitle: Lorem Etiam Nullam
+        title: Project Example2
+        url: blogs/proj2
