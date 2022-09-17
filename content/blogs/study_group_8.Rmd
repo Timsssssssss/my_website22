@@ -377,14 +377,14 @@ joined_sales %>%
 conf_joined_sales <- joined_sales %>% 
   #Split the date to get months so that we can identify the holidays
   mutate(year = year(date), 
-         month = month(date, label = TRUE), 
+         month = as.factor(month(date)), 
          week = week(date)) %>% 
   # Identidy the holidays and call normal day "no holiday"
   mutate(holiday = case_when(
-    (is_holiday == TRUE) & (month == "Dec") ~ "Christmas",
-    (is_holiday == TRUE) & (month == "Feb") ~ "Super Bowl",
-    (is_holiday == TRUE) & (month == "Nov") ~ "Thanksgiving",
-    (is_holiday == TRUE) & (month == "Sep") ~ "Labor day",
+    (is_holiday == TRUE) & (month == 12) ~ "Christmas",
+    (is_holiday == TRUE) & (month == 2) ~ "Super Bowl",
+    (is_holiday == TRUE) & (month == 11) ~ "Thanksgiving",
+    (is_holiday == TRUE) & (month == 9) ~ "Labor day",
     (is_holiday == FALSE) ~ "No Holiday"
   ))
   
