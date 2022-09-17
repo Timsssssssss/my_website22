@@ -1,0 +1,562 @@
+---
+categories:  
+- ""    #the front matter should be like the one found in, e.g., blog2.md. It cannot be like the normal Rmd we used
+- ""
+date: "2022-09-17"
+description: Store Sales Analysis # the title that will show up once someone gets to this page
+draft: false
+image: store.jpg # save picture in \static\img\blogs. Acceptable formats= jpg, jpeg, or png . Your iPhone pics wont work
+
+keywords: ""
+slug: store # slug is the shorthand URL address... no spaces plz
+title: Store Sales Analysis
+---
+
+```{r, setup, echo=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=6.75, 
+  fig.height=6.75,
+  fig.align = "center"
+)
+```
+
+```{r load-libraries, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(GGally)
+library(readxl)
+library(here)
+library(skimr)
+library(janitor)
+library(broom)
+library(performance)
+library(car)
+library(lubridate)
+library(huxtable)
+```
+
+```{r set_global_theme}
+
+theme_set(theme_bw())
+
+```
+
+# Exploratory Data Analysis
+
+## Inspecting and Cleaning the Data
+
+As a first step to our EDA, we loud our data into the environment and assign it to variables. We use vroom, as it is superior in speed compared to read.csv.
+
+```{r load_data}
+
+# Load data into environment and assign to variables
+sales <- vroom::vroom("data/sales.csv")
+details <- vroom::vroom("data/details.csv")
+stores <- vroom::vroom("data/stores.csv")
+
+```
+
+Next, we apply janitor::clean_names to bring the column names in order, to also make it easier joinable in the future.
+
+```{r clean_names}
+
+# Clean names of data frames
+sales <- janitor::clean_names(sales)
+details <- janitor::clean_names(details)
+stores <- janitor::clean_names(stores)
+
+```
+
+By inspecting the data, we can see problems that may affect our future analysis. For each data frame, we change types for some of the variables.
+
+```{r inspect_data_sales}
+
+# Inspect Sales data frame
+skim(sales)
+glimpse(sales)
+head(sales)
+
+```
+```{r clean_sales_data}
+
+# Change store ID and dept to factor
+sales <- sales %>% 
+  mutate(store = as.factor(store),
+         dept = as.factor(dept),
+         # Change date format
+         date = dmy(date))
+
+```
+
+```{r inspect_data_details}
+
+# Inspect Sales data frame
+skim(details)
+glimpse(details)
+head(details)
+
+```
+
+```{r clean_details_data}
+
+# Change store ID and dept to factor
+details <- details %>% 
+  mutate(store = as.factor(store),
+         # Change date format
+         date = dmy(date),
+         # Remove NAs in mark_downs
+         mark_down1 = replace_na(mark_down1,0),
+         mark_down2 = replace_na(mark_down2,0),
+         mark_down3 = replace_na(mark_down3,0),
+         mark_down4 = replace_na(mark_down4,0),
+         mark_down5 = replace_na(mark_down5,0))
+
+```
+
+```{r inspect_data_stores}
+
+# Inspect Sales data frame
+skim(stores)
+glimpse(stores)
+head(stores)
+
+```
+```{r clean_stores_data}
+
+# Change store ID and dept to factor
+stores <- stores %>% 
+  mutate(store = as.factor(store),
+         type = as.factor(type))
+```
+
+As a last step, we join the dataframes together into one dataframe. As for the key, we can observe that all data frames share the "store" variable. For sales and details, we also have to include "date" and "is_holiday" in the join.
+
+```{r join_dataframes}
+
+# Join data frames together and assign to variable
+joined_sales <- sales %>% 
+  left_join(by = c("store","date","is_holiday"), y = details) %>% 
+  left_join(by = "store", y = stores)
+
+```
+
+## Exploratory Analysis
+
+We start by looking at whether the dates overlap for sales and details, so that we can assign the details values for each observation in the sales. As we can see from the below code and output, both dataframes start at the same date, while the details spans more weeks then the sales. This allows us to seamlessly join details to the sales.
+
+```{r time_span_diff}
+
+# Calculate weeks between min and max date for both data frames
+sales %>% 
+  summarize(max_date = max(date),
+            min_date = min(date),
+            weeks_covered = difftime(max_date, min_date, unit = "weeks"))
+
+details %>% 
+  summarize(max_date = max(date),
+            min_date = min(date),
+            weeks_covered = difftime(max_date, min_date, unit = "weeks"))
+
+```
+
+When investigating the size of the stores, we can also deduct that there are 3 stores with 79 distinct departments, namely 13, 15 and 19. This is the maximum amount of departments within a single store in the sample. Such a high number of departments leads us to make first assumptions about the type of store. We can perhaps the data to come from a company like Walmart, which are known to sell essentially everything in their larger stores, hence a lot of departments.
+
+```{r max_departments}
+
+# Calculate store with maximum departments  
+sales %>% 
+  group_by(store) %>% 
+  summarize(count_distinct = n_distinct(dept)) %>%
+  slice_max(count_distinct, n = 1)
+
+```
+
+To better understand the categorization of stores into their respective types, we investigate their correlated details. By graphing the size of the stores, colored by type, we can see that the size seems to be a significant indicator for a stores categorization. Nevertheless, we observe that some stores are very small, even though they are categorized in, for example, A.
+
+```{r check_store_types}
+
+# Graph size per store type
+joined_sales %>% 
+  filter(weekly_sales >= 0) %>% 
+  mutate(store = fct_reorder(store,size)) %>% 
+  ggplot(aes(x = store, y = size, fill = type)) +
+        geom_col()
+
+```
+
+```{r  weekly sales by months in each year}
+
+#analysis of how weekly sales varies across months in every year
+joined_sales %>% 
+#extract year from date
+  mutate(year = year(date)) %>% 
+#extract month from date
+  mutate(month = as.factor(month(date))) %>% 
+#create histogram for weekly sales by month 
+  ggplot(aes(x = month, y = weekly_sales)) +
+  geom_col()+
+# facet the histogram by year
+  facet_wrap(~year) +
+  labs(title="Weekly Sales by month every year",x="Month",y="Weekly Sales")
+
+```
+
+When trying to find the store with the most sales in 2011, we isolate store 4, which is indeed categorized as type A. It is also one of the larger stores within type A. Therefore we can already assume that there is a correlation between size of a store and sales, which we will investigate next.
+
+```{r sales_overview_2011}
+
+# Calculate store with most sales in 2011
+sales %>% 
+  # Select relevant time frame
+  filter(date >= "2011-01-07" & date <= "2011-12-30") %>% 
+  group_by(store) %>% 
+  # Calculate summary statistics
+  summarize(annl_sales = sum(weekly_sales),
+            avg_wkly_sales = mean(weekly_sales)) %>% 
+            slice_max(annl_sales, n = 2)
+
+```
+
+The graph below supports our finding. Store 4 has the highest total sales, closely followed by 20. Type A stores have the highest overall sales, followed by type B and type C. However, there are 2 outliers in type A stores which are store 33 and 36. Both these stores have untypically low sales, which should be investigated.
+
+```{r sales_analysis_by_store_and_type}
+
+# Create plot to show total sales by store
+joined_sales %>% 
+  group_by(store, type) %>%
+  mutate(total_sales_by_store = sum(weekly_sales)) %>% 
+  ungroup() %>% 
+  mutate(store_n = fct_reorder(store, total_sales_by_store)) %>% 
+  ggplot(aes(x=store_n, y = total_sales_by_store, fill=type))+
+  geom_col()+
+  labs(title ="Stores total sales analysis between 2010-2012, classified by type",
+       x = "Store Number", 
+       y = "Total amount sold between 2010-2012")+
+  # Change scale y to show dollar amounts
+  scale_y_continuous(labels = scales::label_dollar())
+
+```
+
+Another variable we decided to look at is temperature. If stores have a certain type for other reasons than just size, temperature could hint at this. For example, we would expect stores carrying items typically related to summer to flourish in warmer temperatures. According to the graphs, for type B and C stores sales increases when temperature increases, and on the other hand for type A sales decreases when temperature increases. This could indicate that stores of type B and C sell items that are more tailored to warm temperatures.
+
+```{r temp_vs_weekly_sales}
+
+#analysis of how the temperature affects weekly sales by store 
+joined_sales %>% 
+  group_by(store) %>% 
+  #calculate average_weekly_sales_by_store and add it as a new column
+  mutate(mean_weekly_sales = mean(weekly_sales)) %>% 
+  ggplot(aes(x = temperature, y = mean_weekly_sales, color = type)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_bw()+
+  labs(title="Weekly sales of samller stores seem to be positively influenced by temperature",
+       x="Temperature",
+       y="Weekly Sales")
+
+```
+
+
+```{r distribution_weekly_sales}
+
+# Create plot for distribution by store type
+joined_sales %>% 
+  # Remove days with negative weekly sales
+  filter(weekly_sales >= 0) %>% 
+  # Add log weekly_sales to account for skewness of graph and outliers
+  mutate(log_wkly_sales = log(weekly_sales)) %>% 
+  ggplot(aes(x = log_wkly_sales, fill = type)) +
+  geom_histogram() +
+  facet_wrap(~ type) +
+  # Set the limits of the x-axis
+  xlim(0,13) +
+  labs(title = "After applying a log, observe a left-skewed distribution for all store types",
+       x = "Weekly Sales (logarithmic)",
+       y = "Count") +
+  theme(legend.position = "none")
+
+```
+
+Over the months in the year, the distribution of sales is also roughly the same for each year. In all years, the weekly sales are highest in March ,July and especially December. The most likely explanation is that there are important holiday in these months and people are more likely to spend more on these holiday. For example, Easter is in March (grociers for feasts), summer holiday is in July (shopping for travel items) and most importantly Christmas is in December (gifts).
+
+```{r  weekly_sales_by_months_year}
+
+#analysis of how weekly sales varies across months in every year
+joined_sales %>% 
+#extract year from date
+  mutate(year = year(date),
+         month = as.factor(month(date, label = TRUE))) %>% 
+#create histogram for weekly sales by month 
+  ggplot(aes(x = month, y = weekly_sales)) +
+  geom_col()+
+# facet the histogram by year
+  facet_wrap(~year) +
+  labs(title="The monthly sales follow the same distribution every year",
+       x="Month",
+       y="Weekly Sales") +
+  scale_y_continuous(labels = scales::label_dollar())
+
+```
+
+Of course, we would like to determine whether we have any correlations between the weekly sales and another predictive variable. When looking at the correlation coefficients, we notice that only "size" has a correlation of higher than 0.1 in absolute values, namely 0.240. This also informs us that no variable from the details dataframe seems to be correlated with the weekly sales.
+
+```{r sales_correlation}
+
+joined_sales %>% 
+  # Choose random sample from dataframe to make ggpairs run
+  sample_n(20000) %>%
+  # Select only the numeric values
+  select_if(is.numeric) %>% 
+  GGally::ggpairs()
+
+```
+
+Intuition tells us that a store would expect more sales during holiday weeks, rather than regular trading weeks. When we proceed to calculate the mean and median for holiday and non-holiday weeks and then subtract them from another, we see that only few stores have a lower mean weekly sales in holiday weeks. When we do the same for the median, we also see only few stores, however it concerns different stores than for the mean. 
+
+```{r mean_median_vs_holidays}
+
+# Calculate mean and median for holiday weeks
+mean_med_hol <- joined_sales %>% 
+  group_by(store) %>% 
+  filter (is_holiday == TRUE) %>% 
+  summarize(mean_sales_hol = mean(weekly_sales),
+            median_sales_hol = median(weekly_sales))
+
+# Calculate mean and median for normal trading weeks
+mean_med_not_hol <- joined_sales %>% 
+  group_by(store) %>% 
+  filter (is_holiday == FALSE) %>% 
+  summarize(mean_sales_not_hol = mean(weekly_sales),
+            median_sales_not_hol = median(weekly_sales))
+
+# Joined dataframes above to be able to calculate the difference
+joined_mean_med_hol <- mean_med_hol %>% 
+  left_join(by = "store", y = mean_med_not_hol) %>%
+  mutate(difference_mean = mean_sales_hol - mean_sales_not_hol,
+         difference_med = median_sales_hol - median_sales_not_hol)
+
+# Arrange the dataframe to see negative values for mean and median
+joined_mean_med_hol %>% 
+  arrange(difference_mean)
+
+joined_mean_med_hol %>% 
+  arrange(difference_med)
+
+```
+
+We would also like to take a closer look at the spread of values for each store. We use the logarithmic sales on the axis to better visualize the data, given the high amount of outliers.
+
+```{r spread_by_store}
+
+# Create plot for spread per store
+joined_sales %>% 
+  group_by(store) %>% 
+  mutate(log_wkly_sales = log(weekly_sales)) %>% 
+  ggplot(aes(x = log_wkly_sales, y = store)) + 
+  geom_boxplot() +
+  labs(title = "The medians of log weekly sales for the stores are closely grouped together",
+       x = "Weekly Sales (logarithmic)",
+       y = "Store")
+
+
+```
+
+# Inferential Statistics
+
+```{r Identify_Holidays}
+
+#glimpse(joined_sales)
+conf_joined_sales <- joined_sales %>% 
+  #Split the date to get months so that we can identify the holidays
+  mutate(year = year(date), 
+         month = month(date, label = TRUE), 
+         week = week(date)) %>% 
+  # Identidy the holidays and call normal day "no holiday"
+  mutate(holiday = case_when(
+    (is_holiday == TRUE) & (month == "Dec") ~ "Christmas",
+    (is_holiday == TRUE) & (month == "Feb") ~ "Super Bowl",
+    (is_holiday == TRUE) & (month == "Nov") ~ "Thanksgiving",
+    (is_holiday == TRUE) & (month == "Sep") ~ "Labor day",
+    (is_holiday == FALSE) ~ "No Holiday"
+  ))
+  
+```
+
+## Differce in impact on sales on different holiday weeks
+```{r Highest_sales_holiday}
+
+holiday_sales <- conf_joined_sales %>% 
+  #Filter the four holidays
+filter(is_holiday == TRUE) %>% 
+  group_by(holiday) %>% 
+  summarise(mean_weekly_sales = mean(weekly_sales)) %>% 
+  arrange(desc(mean_weekly_sales))
+
+  holiday_sales
+```
+
+Thanksgiving generates the highest weekly sales among holiday weeks which is 22362.
+
+```{r Sales Difference}
+
+holiday_sales %>% 
+  filter( holiday %in% c("Thanksgiving", "Labor day")) %>% 
+   summarise(Name = "Higher thanksgiving sales compared to labor day", diff_sales = abs(diff(mean_weekly_sales)))
+
+```
+
+The difference in average weekly sales between Thanksgiving and Labor day is 6368.
+
+```{r T-test}
+
+#T-test for data without Thanksgiving
+conf_joined_sales %>% 
+  filter(holiday != "Thanksgiving") %>% 
+  #Using T-test
+  t.test(weekly_sales~is_holiday,.)
+
+#T-test for data without Thanksgiving
+conf_joined_sales %>% 
+  filter((holiday == "Thanksgiving") | (holiday == "No Holiday")) %>% 
+  #Using T-test
+  t.test(weekly_sales~is_holiday,.)
+```
+
+The difference of sales on holiday weeks and non-holiday weeks is not significant when filtering out Thanksgiving from the data since the P value from the T-test is greater than 5%. However, when we look at the average weekly_sales in the week of thanksgiving, we can observe that 0 is not within the 95% confidence interval. We conclude with a 95% confidence that there truly is a difference in means between weekly sales in the Thanksgiving week vs non-holiday weeks.
+
+From the results of the t-test, when analyzing on the basis of weeks, we can see that the sales are highest in the week of Thanksgiving. The sales in the weeks of other occasions is not that differential. This could be following the trend that during holidays such as Christmas people tend to fly back home and buy gifts earlier. Hence, the sales could be higher when looking at monthly sales.
+
+# Regression
+
+We calculate the weekly sales by store, so that we won't have 1:n format for variables like temperature. We remove the variable store because it's not an explanatory variable. And for Markdown have too many missing variables, we don't include it in the model
+
+```{r, remove_store}
+
+sales_by_store <- joined_sales %>% 
+  mutate(type = as.factor(type)) %>% 
+  group_by(store,date) %>% 
+  summarize(weekly_sales = sum(weekly_sales)) %>% 
+  left_join(by = c("store","date"), y = details) %>% 
+  left_join(by = "store", y = stores) %>% 
+  mutate(type = as.factor(type)) %>% 
+  mutate(month = as.factor(month(date))) %>% 
+  # Identify the holidays and call normal day no holiday"
+  mutate(holiday = case_when(
+    (is_holiday == TRUE) & (month == 2) ~ "Super Bowl",
+    (is_holiday == TRUE) & (month == 9) ~ "Labor Day",
+    (is_holiday == TRUE) & (month == 11) ~ "Thanksgiving",
+    (is_holiday == TRUE) & (month == 12) ~ "Christmas",
+    (is_holiday == FALSE) ~ "No Holiday")) %>% 
+  mutate(holiday = as.factor(holiday))
+
+model0 <- lm(weekly_sales~.-store-month-is_holiday,data=sales_by_store)
+msummary(model0)
+vif(model0)
+
+```
+
+Look at the correlations between each variable, and add each variable one by one according to the correlation
+
+```{r correlation}
+
+ggpairs(sales_by_store[,c("weekly_sales","temperature","fuel_price","cpi","unemployment","size")])
+
+```
+
+First, we simply add size as a predictor, it's significant and explains huge amount of variability of the model.
+
+```{r model1}
+
+# Create regression for size
+model1 <- lm(weekly_sales~size,
+             data=sales_by_store)
+msummary(model1)
+
+```
+
+Next, we add back the observed holidays as a predictor.
+
+```{r model2}
+
+# Adding holidays back into the model
+model2 <- lm(weekly_sales~size+holiday,
+             data=sales_by_store)
+msummary(model2)
+
+```
+Next, we include the unemployment rate, which we would expect to affect consumer spending.
+
+```{r model3}
+
+# Add unemployment rate to the model
+model3 <- lm(weekly_sales~size+holiday+unemployment,
+             data=sales_by_store)
+msummary(model3)
+
+```
+As we have seen earlier, temperature seemed to have some effect on the sales of the stores. Let us see whether it is signficant in predicting sales.
+
+```{r model4}
+
+# Add temperature to the model
+model4 <- lm(weekly_sales~size+holiday+unemployment+temperature,
+             data=sales_by_store)
+msummary(model4)
+
+```
+Fuel price could also be a significant predictor, given that higher prices might cause consumers not to travel to further away stores, negatively affecting their sales.
+
+```{r model5}
+
+# Add fuel price to the plot
+model5 <- lm(weekly_sales~size+holiday+unemployment+temperature+fuel_price,
+             data=sales_by_store)
+msummary(model5)
+
+```
+
+While fuel price is at first not significant, after we add type and cpi, fuel price indeed significant.
+
+```{r model6}
+
+# Add type and cpi into the model
+model6 <- lm(weekly_sales~size+holiday+unemployment+cpi+temperature+type+fuel_price,
+             data=sales_by_store)
+msummary(model6)
+
+```
+
+Finally, we  summarize of all the models to make them comparable to one another.
+
+```{r final_model6}
+
+# Create summary table for all models - note that we have model0, so there will be model 7 in the table
+huxreg(model0, model1,  model2, model3, model4, model5, model6, 
+       statistics = c('#observations' = 'nobs', 
+                      'R squared' = 'r.squared', 
+                      'Adj. R Squared' = 'adj.r.squared', 
+                      'Residual SE' = 'sigma'), 
+       bold_signif = 0.05, 
+       stars = NULL
+)
+
+```
+Based on our model, we offer two answers to the questions posed in the instructions:
+
+a) A unit increase in temperature will cause a 1370 increase in sales. A unit increase in fuel_price will cause a 24900 decrease in sales.
+
+b) On average, we expect to generate 86600 revenues less in the Labor Day week than in the week of the Super Bowl
+
+```{r final}
+
+msummary(model6)
+
+```

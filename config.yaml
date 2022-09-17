@@ -84,11 +84,11 @@ params:
 #        subtitle: Feugiat Amet Tempus
         title: My Career Narrative
         url: blogs/wk
-      - image: data.jpg
-#        subtitle: Lorem Etiam Nullam
-        title: Project Example
-        url: blogs/proj1
       - image: brexit.jpg
 #       subtitle: Lorem Etiam Nullam
-        title: Project Example2
+        title: Project Example
         url: blogs/proj2
+      - image: store.jpg
+#       subtitle: Lorem Etiam Nullam
+        title: Store Sales Analysis
+        url: blogs/store
