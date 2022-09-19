@@ -71,8 +71,8 @@ params:
 #      - name: Elements
 #        url: elements.html
     menu: Menu
-    subtitle: By HTML5 Up
-    title: Forty
+    subtitle: PERSONAL WEBSITE
+    title: TIANYI ZHANG
   tiles:
     enable: yes
     showcase:
@@ -92,3 +92,9 @@ params:
 #       subtitle: Lorem Etiam Nullam
         title: Store Sales Analysis
         url: blogs/store
+  two:
+    buttonText: Go to MY BLOGS
+    enable: yes
+    #subtitle: "N/A"
+    title: YOU HIT THE BOTTOM
+    url: blogs
