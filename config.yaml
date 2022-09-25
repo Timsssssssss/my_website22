@@ -84,6 +84,10 @@ params:
 #        subtitle: Feugiat Amet Tempus
         title: My Career Narrative
         url: blogs/wk
+      - image: weibo.jpg
+#       subtitle: Lorem Etiam Nullam
+        title: Sentiment Analysis
+        url: blogs/weibo
       - image: brexit.jpg
 #       subtitle: Lorem Etiam Nullam
         title: Brexit and GDP components Analysis

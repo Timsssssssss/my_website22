@@ -1,0 +1,147 @@
+---
+categories:  
+- ""    #the front matter should be like the one found in, e.g., blog2.md. It cannot be like the normal Rmd we used
+- ""
+date: "2022-09-14"
+description: Brexit and GDP Analysis   # the title that will show up once someone gets to this page
+draft: false
+image: brexit.jpg # save picture in \static\img\blogs. Acceptable formats= jpg, jpeg, or png . Your iPhone pics wont work
+
+keywords: ""
+slug: proj2 # slug is the shorthand URL address... no spaces plz
+title: Brexit and GDP Analysis
+---
+
+
+
+<div id="brexit-plot" class="section level2">
+<h2>Brexit plot</h2>
+<pre class="r"><code>brexit &lt;- read_csv(&quot;https://raw.githubusercontent.com/kostis-christodoulou/am01/master/data/brexit_results.csv&quot;)</code></pre>
+<pre class="r"><code>brexit %&gt;% 
+  # Pivot the data into longer format so that parties are in the same column
+  pivot_longer(col = 2:5,
+               names_to = &quot;party&quot;,
+               values_to = &quot;percent&quot;) %&gt;% 
+  ggplot(aes(x = percent, y = leave_share,color = party))+
+  # Set the transparency of the points to be 0.5
+  geom_point(size = 2.5,alpha = 0.3)+
+  # Draw a fitted line with standard error
+  geom_smooth(method = &quot;lm&quot;, se = TRUE)+
+  # Assign color for each party
+  scale_color_manual(labels = c(&quot;Conservative&quot;, &quot;Labour&quot;,&quot;Lib Dems&quot;,&quot;UKIP&quot;),
+                     values = c(&quot;#0087DC&quot;, &quot;#E32636&quot;,&quot;#FDBB30&quot;,&quot;#6D3177&quot;)) +
+  theme_bw()+
+  theme(legend.position = &quot;bottom&quot;,legend.title = element_blank())+
+  scale_y_continuous(breaks=seq(20, 100, 20),
+                     limits = c(20,100))+
+  scale_x_continuous(breaks=seq(0, 80, 20),
+                     limits = c(0,80))+
+  labs(title=&quot;How political affiliation translated to Brexit Voting&quot;,
+       x=&quot;Party % in the UK 2015 general election&quot;,
+       y = &quot;Leave % in the 2016 Brexit referendum&quot;)</code></pre>
+<p><img src="/blogs/Brexit_files/figure-html/brexit-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="gdp-components-over-time-and-among-countries" class="section level2">
+<h2>GDP components over time and among countries</h2>
+<p>The GDP data we will look at is from the United Nations’ National Accounts Main Aggregates Database, which contains estimates of total GDP and its components for all countries from 1970 to today.</p>
+<pre class="r"><code>UN_GDP_data  &lt;-  read_excel(here::here(&quot;data&quot;, &quot;Download-GDPconstant-USD-countries.xls&quot;), # Excel filename
+                sheet=&quot;Download-GDPconstant-USD-countr&quot;, # Sheet name
+                skip=2) # Number of rows to skip</code></pre>
+<pre class="r"><code>tidy_GDP_data  &lt;-  UN_GDP_data %&gt;%
+  pivot_longer(cols = 4:51,
+               names_to = &quot;year&quot;,
+               values_to = &quot;value&quot;) %&gt;% 
+  # Turning the selected columns&#39; data type into dbl
+  mutate(year = as.double(year),value = as.double(value),
+         value = value/1e9)
+
+glimpse(tidy_GDP_data)</code></pre>
+<pre><code>## Rows: 176,880
+## Columns: 5
+## $ CountryID     &lt;dbl&gt; 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,…
+## $ Country       &lt;chr&gt; &quot;Afghanistan&quot;, &quot;Afghanistan&quot;, &quot;Afghanistan&quot;, &quot;Afghanista…
+## $ IndicatorName &lt;chr&gt; &quot;Final consumption expenditure&quot;, &quot;Final consumption expe…
+## $ year          &lt;dbl&gt; 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 19…
+## $ value         &lt;dbl&gt; 5.56, 5.33, 5.20, 5.75, 6.15, 6.32, 6.37, 6.90, 7.09, 6.…</code></pre>
+<pre class="r"><code># Let us compare GDP components for these 3 countries
+country_list &lt;- c(&quot;United States&quot;,&quot;India&quot;, &quot;Germany&quot;)</code></pre>
+<pre class="r"><code>tidy_GDP_data %&gt;% 
+  filter(Country %in% country_list,
+         IndicatorName %in% c(&quot;Gross capital formation&quot;,
+                              &quot;Exports of goods and services&quot;,
+                              &quot;General government final consumption expenditure&quot;,
+                              &quot;Household consumption expenditure (including Non-profit institutions serving households)&quot;,
+                              &quot;Imports of goods and services&quot;)) %&gt;% 
+  ggplot(aes(x = year, y = value,color = IndicatorName))+
+  geom_line(size = 1)+
+  facet_wrap(~Country)+
+  scale_color_discrete(labels = c(&quot;Gross capital formation&quot;, 
+                                  &quot;Exports&quot;,&quot;Government expenditure&quot;,
+                                  &quot;Household expenditure&quot;,&quot;Imports&quot;))+
+  labs(title=&quot;GDP components over time&quot;,
+       subtitle = &quot;In constant 2010 USD&quot;,
+       x= NULL,
+       y = &quot;Billion US$&quot;,
+       color = &quot;Components of GDP&quot;)+
+  theme_bw()</code></pre>
+<p><img src="/blogs/Brexit_files/figure-html/plot1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>tidy_GDP_recalc &lt;- tidy_GDP_data %&gt;% 
+ filter(Country %in% country_list,
+        IndicatorName %in% c(&quot;Gross capital formation&quot;,
+                             &quot;Exports of goods and services&quot;,
+                             &quot;General government final consumption expenditure&quot;,
+                             &quot;Household consumption expenditure (including Non-profit institutions serving households)&quot;,
+                             &quot;Imports of goods and services&quot;,
+                             &quot;Gross Domestic Product (GDP)&quot;)) %&gt;% 
+ mutate(value = value / 10^9) %&gt;% 
+ # pivot the data set wider so that the types show in different columns
+ pivot_wider(names_from = IndicatorName,values_from = value) %&gt;% 
+ # calculate the net export, total GDP and difference between given and calculated GDP
+ mutate(Net_Exports = `Exports of goods and services` - `Imports of goods and services`,
+        GDP_recalc = `Gross capital formation` + `General government final consumption expenditure`+
+         `Household consumption expenditure (including Non-profit institutions serving households)`+
+          Net_Exports,
+        GDP_diff = formattable::percent(`GDP_recalc`-`Gross Domestic Product (GDP)`)/`GDP_recalc`)
+
+# Show percentage change
+tidy_GDP_recalc %&gt;% 
+  select(Country, year, GDP_diff)</code></pre>
+<pre><code>## # A tibble: 144 × 3
+##    Country  year GDP_diff  
+##    &lt;chr&gt;   &lt;dbl&gt; &lt;formttbl&gt;
+##  1 Germany  1970 2.94%     
+##  2 Germany  1971 3.42%     
+##  3 Germany  1972 3.43%     
+##  4 Germany  1973 2.84%     
+##  5 Germany  1974 1.75%     
+##  6 Germany  1975 2.84%     
+##  7 Germany  1976 2.76%     
+##  8 Germany  1977 2.69%     
+##  9 Germany  1978 2.96%     
+## 10 Germany  1979 3.33%     
+## # … with 134 more rows
+## # ℹ Use `print(n = ...)` to see more rows</code></pre>
+<pre class="r"><code>tidy_GDP_recalc %&gt;% 
+ # pivot the indicator names longer, leaving GDP as a column
+ pivot_longer(col = c(4,5,6,10),names_to = &quot;IndicatorName&quot;,values_to = &quot;value&quot;) %&gt;% 
+ # Calculate the proportion
+ mutate(proportion = value / GDP_recalc) %&gt;% 
+ ggplot(aes(x = year, y = proportion,color = IndicatorName))+
+ geom_line(size = 1)+
+ facet_wrap(~Country)+
+ scale_color_discrete(labels = c(&quot;Government Expenditure&quot;,
+                                 &quot;Gross capital formation&quot;,
+                                 &quot;Household Expenditure&quot;,
+                                 &quot;Net Exports&quot;))+
+ labs(title=&quot;GDP and its breakdown at constant 2010 prices in US Dollars&quot;,
+      x= NULL,
+      y = &quot;proportion&quot;,
+      caption = &quot;\nSource: United Nations, http://unstats.un.org/unsd/snaama/Downloads&quot;,color = NULL)+
+ scale_y_continuous(labels = scales::percent)+
+ theme_bw()</code></pre>
+<p><img src="/blogs/Brexit_files/figure-html/plot2-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>To commence our analysis, we would like to look at the similarities between the countries. It is clearly visible that household expenditure is by far the highest contributor to GDP in all countries. This is perfectly expected in general economics. For the remaining the parts of the GDP, the order of magnitude of their contribution is also approximately the same for all countries. India and USA share a trade deficit for most of the years. This might be tracked back to China, the largest importer for both USA and India. Especially for Germany and the USA, we can see that the components of the GDP comprise approximately the same percentage respectively. This is to be expected, as these countries are considered developed countries of similar economy and society, generally speaking. India however is a completely different story.</p>
+<p>The first thing that becomes apparent is that India has visibly lower government expenditure than the comparison countries. This is not unusual for low-income countries, as they spend less on things such as social protection, health care and unemployment benefits. Nevertheless, India´s government expenditure is still within a reasonable margin and has increased in recent years. Another interesting finding is the continual percentage contribution decrease in household expenditure since 1970. An explanation is quickly found, as we can observe gross capital formation mirroring the change in reverse. We can deduct that the Indian population is investing more of their disposable income into assets, rather than spending it. It would prove interesting to identify the precise reason for this shift.</p>
+<p>The USA also displayed a shift of components, however here it concerns government expenditure and capital formation. The shift might be attributed largely to the government adapting their spending policy, investing more heavily in infrastructure and military machinery than intangible benefits for the public. As we can also see, the USA is the only country for which the proportion of household expenditure follows has a positive slope. With the simultaneously increasing trade deficit, we can assume that US citizens increased their spending of foreign goods. This could be related to improving trade routes with China and Europe, as well as the rise of eCommerce in the later years. Of course, we also see a significant drop in gross capital formation around the time of the 2008 financial crisis, which also seems to have affected imports.</p>
+<p>Last but not least, let us look at Germany. Looking at the visualization of the data, we see the most stable distribution of GDP components over the years between the three countries. Germany has been able to reliably maintain a trade surplus over most years. Especially since 2000, trade seems to have become more central to Germany´s GDP. Such an observation is not entirely surprising, giving that Germany has a strong footing in most large sectors (e.g. agriculture, pharma) and enjoys strong demand for its machinery and vehicles. Meanwhile, household expenditure contributes less to the GDP than observed in the other countries. This does not mean that Germans spend less, but that the GDP of Germany is just more evenly distributed between its components.</p>
+</div>
