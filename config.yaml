@@ -86,8 +86,12 @@ params:
         url: blogs/wk
       - image: brexit.jpg
 #       subtitle: Lorem Etiam Nullam
-        title: Project Example
+        title: Brexit and GDP components Analysis
         url: blogs/proj2
+      - image: data.jpg
+#       subtitle: Lorem Etiam Nullam
+        title: SF-Rentals Analysis
+        url: blogs/proj1
       - image: store.jpg
 #       subtitle: Lorem Etiam Nullam
         title: Store Sales Analysis
