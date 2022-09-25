@@ -1,0 +1,405 @@
+---
+categories:  
+- ""    #the front matter should be like the one found in, e.g., blog2.md. It cannot be like the normal Rmd we used
+- ""
+date: "2022-09-04"
+description: SF-Rentals Analysis # the title that will show up once someone gets to this page
+draft: false
+image: data.jpg # save picture in \static\img\blogs. Acceptable formats= jpg, jpeg, or png . Your iPhone pics wont work
+
+keywords: ""
+slug: proj1 # slug is the shorthand URL address... no spaces plz
+title: SF-Rentals Analysis
+---
+
+
+
+<div id="rents-in-san-francsisco-2000-2018" class="section level1">
+<h1>Rents in San Francsisco 2000-2018</h1>
+<pre class="r"><code># download directly off tidytuesdaygithub repo
+
+rent &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-07-05/rent.csv&#39;)</code></pre>
+<p>The data is separated into both characters and numbers. At first look, the data types seem to be correctly allocated given the nature of the variables. As for completeness, the most missing value is the description with 197,542 missing. However, details and location (address and coordinates) are closely behind. This is not very surprising, as people are both careful with publishing addresses on craigslist and lazy in writing detailed descriptions.</p>
+<pre class="r"><code># Inspect the rent data
+skimr::skim(rent)</code></pre>
+<table>
+<caption>(#tab:skim_rents_data)Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">rent</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">200796</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">17</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">8</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">9</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<colgroup>
+<col width="18%" />
+<col width="13%" />
+<col width="18%" />
+<col width="5%" />
+<col width="8%" />
+<col width="8%" />
+<col width="12%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">post_id</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">9</td>
+<td align="right">14</td>
+<td align="right">0</td>
+<td align="right">200796</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">nhood</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">4</td>
+<td align="right">43</td>
+<td align="right">0</td>
+<td align="right">167</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">city</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">5</td>
+<td align="right">19</td>
+<td align="right">0</td>
+<td align="right">104</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">county</td>
+<td align="right">1394</td>
+<td align="right">0.99</td>
+<td align="right">4</td>
+<td align="right">13</td>
+<td align="right">0</td>
+<td align="right">10</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">address</td>
+<td align="right">196888</td>
+<td align="right">0.02</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0</td>
+<td align="right">2869</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">title</td>
+<td align="right">2517</td>
+<td align="right">0.99</td>
+<td align="right">2</td>
+<td align="right">298</td>
+<td align="right">0</td>
+<td align="right">184961</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">descr</td>
+<td align="right">197542</td>
+<td align="right">0.02</td>
+<td align="right">13</td>
+<td align="right">16975</td>
+<td align="right">0</td>
+<td align="right">3025</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">details</td>
+<td align="right">192780</td>
+<td align="right">0.04</td>
+<td align="right">4</td>
+<td align="right">595</td>
+<td align="right">0</td>
+<td align="right">7667</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<colgroup>
+<col width="12%" />
+<col width="8%" />
+<col width="12%" />
+<col width="8%" />
+<col width="7%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="8%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">date</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">2.01e+07</td>
+<td align="right">44694.07</td>
+<td align="right">2.00e+07</td>
+<td align="right">2.01e+07</td>
+<td align="right">2.01e+07</td>
+<td align="right">2.01e+07</td>
+<td align="right">2.02e+07</td>
+<td align="left">▁▇▁▆▃</td>
+</tr>
+<tr class="even">
+<td align="left">year</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">2.01e+03</td>
+<td align="right">4.48</td>
+<td align="right">2.00e+03</td>
+<td align="right">2.00e+03</td>
+<td align="right">2.01e+03</td>
+<td align="right">2.01e+03</td>
+<td align="right">2.02e+03</td>
+<td align="left">▁▇▁▆▃</td>
+</tr>
+<tr class="odd">
+<td align="left">price</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">2.14e+03</td>
+<td align="right">1427.75</td>
+<td align="right">2.20e+02</td>
+<td align="right">1.30e+03</td>
+<td align="right">1.80e+03</td>
+<td align="right">2.50e+03</td>
+<td align="right">4.00e+04</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">beds</td>
+<td align="right">6608</td>
+<td align="right">0.97</td>
+<td align="right">1.89e+00</td>
+<td align="right">1.08</td>
+<td align="right">0.00e+00</td>
+<td align="right">1.00e+00</td>
+<td align="right">2.00e+00</td>
+<td align="right">3.00e+00</td>
+<td align="right">1.20e+01</td>
+<td align="left">▇▂▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">baths</td>
+<td align="right">158121</td>
+<td align="right">0.21</td>
+<td align="right">1.68e+00</td>
+<td align="right">0.69</td>
+<td align="right">1.00e+00</td>
+<td align="right">1.00e+00</td>
+<td align="right">2.00e+00</td>
+<td align="right">2.00e+00</td>
+<td align="right">8.00e+00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">sqft</td>
+<td align="right">136117</td>
+<td align="right">0.32</td>
+<td align="right">1.20e+03</td>
+<td align="right">5000.22</td>
+<td align="right">8.00e+01</td>
+<td align="right">7.50e+02</td>
+<td align="right">1.00e+03</td>
+<td align="right">1.36e+03</td>
+<td align="right">9.00e+05</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">room_in_apt</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">0.00e+00</td>
+<td align="right">0.04</td>
+<td align="right">0.00e+00</td>
+<td align="right">0.00e+00</td>
+<td align="right">0.00e+00</td>
+<td align="right">0.00e+00</td>
+<td align="right">1.00e+00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">lat</td>
+<td align="right">193145</td>
+<td align="right">0.04</td>
+<td align="right">3.77e+01</td>
+<td align="right">0.35</td>
+<td align="right">3.36e+01</td>
+<td align="right">3.74e+01</td>
+<td align="right">3.78e+01</td>
+<td align="right">3.78e+01</td>
+<td align="right">4.04e+01</td>
+<td align="left">▁▁▅▇▁</td>
+</tr>
+<tr class="odd">
+<td align="left">lon</td>
+<td align="right">196484</td>
+<td align="right">0.02</td>
+<td align="right">-1.22e+02</td>
+<td align="right">0.78</td>
+<td align="right">-1.23e+02</td>
+<td align="right">-1.22e+02</td>
+<td align="right">-1.22e+02</td>
+<td align="right">-1.22e+02</td>
+<td align="right">-7.42e+01</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<p>Make a plot that shows the top 20 cities in terms of % of classifieds between 2000-2018. You need to calculate the number of listings by city, and then convert that number to a %.</p>
+<pre class="r"><code># Group by city and count
+rent %&gt;%
+  group_by(city) %&gt;% 
+  count() %&gt;% 
+  # count the rows with in a group and returns a new column n
+  ungroup %&gt;% 
+  mutate(pct_city = n/sum(n)) %&gt;% 
+  # divided each group&#39;s number of rentals by the total amount(sum of all groups)
+  slice_max(order_by=pct_city, n=20) %&gt;% 
+  ggplot(aes(x=pct_city,y=fct_reorder(city,pct_city))) + 
+    geom_col()+
+    labs(title=&quot;San Francisco accounts for more than a quarter of all rental classifieds&quot;,subtitle =&quot;% of Craigslist listings, 2000-2018&quot;,x=NULL,y=NULL,caption = &quot;Source: Pennington, Kate (2018). Bay Area Craigslist Rental Housing Posts,2010-2018&quot;)+
+    theme_bw()+
+    theme(panel.border = element_blank()) +
+    theme(plot.title.position = &quot;plot&quot;)+
+    scale_x_continuous(labels = scales::percent) #Transform the x-axis label into percentage</code></pre>
+<p><img src="/blogs/homework1_group8_files/figure-html/plot_top_cities-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>Make a plot that shows the evolution of median prices in San Francisco for 0, 1, 2, and 3 bedrooms listings.</p>
+<pre class="r"><code>rent %&gt;% 
+  filter(city==&quot;san francisco&quot;, beds %in% 0:3) %&gt;% 
+  group_by(beds,year) %&gt;%
+  summarize(median_price=median(price)) %&gt;% 
+  ggplot(aes(x=year,y=median_price,colour=factor(beds)))+
+  geom_line()+
+  labs(title=&quot;San Francisco rents have been steadily increasing&quot;,subtitle = &quot;0 to 3-bed listings,  2000-2018&quot;,x=NULL,y=NULL,caption = &quot;Source: Pennington, Kate (2018). Bay Area Craigslist Rental Housing Posts,2010-2018&quot;)+
+  facet_wrap(~beds,nrow=1)+ #facet beds
+  theme_bw()+ # change the theme as black-white
+  theme(plot.title.position = &quot;plot&quot;)+
+  theme(legend.position = &quot;none&quot;)+ # hide the legends
+  scale_color_manual(values = c(&quot;red&quot;,&quot;green&quot;,&quot;blue&quot;,&quot;purple&quot;))</code></pre>
+<p><img src="/blogs/homework1_group8_files/figure-html/sf_median_prices-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>Finally, make a plot that shows median rental prices for the top 12 cities in the Bay area.</p>
+<pre class="r"><code># find the top 12 cities 
+top_cities = rent %&gt;%
+  group_by(city) %&gt;% 
+  count() %&gt;% 
+  ungroup %&gt;% 
+  mutate(percent = n/sum(n)) %&gt;% 
+  slice_max(order_by=percent, n=12)
+
+rent %&gt;% 
+  filter(beds==1,  
+         city %in%  top_cities$city) %&gt;% #filter out the cities with 1 bed 
+  group_by(city,year) %&gt;% 
+  summarize(median_price=median(price)) %&gt;% 
+  ggplot(aes(x=year,y=median_price,colour=city))+
+  geom_line()+
+  facet_wrap(~city,nrow=3)+
+  theme_bw()+
+  theme(plot.title.position = &quot;plot&quot;)+
+  labs(title=&quot;Rental prices for 1-bedroom flats in the Bay Area&quot;,x=NULL,y=NULL,caption = &quot;Source: Pennington, Kate (2018). Bay Area Craigslist Rental Housing Posts, 2010-2018&quot;)+
+  theme(legend.position = &quot;none&quot;)# hide the legend</code></pre>
+<p><img src="/blogs/homework1_group8_files/figure-html/spirit_plot-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>First of all, San Francisco has the most listings among all the cities it the Bay Area. The reason behind this could be that San Francisco has a booming economy and is a popular location for large companies, such as Uber or Twitter. These companies recruit a lot outside of San Francisco, leading to a large influx in individuals requiring local accommodation. As the demand is high, supply follows suit. Smaller towns like Redwood City have low population and don’t draw nearly as many foreign settlers. Therefore, the number of listings is comparatively lower.</p>
+<p>The increase in rental prices between 2000 and 2018 in San Francisco is proportionally approximately the same between 0 to 3 bed listings. If there was a larger increase in families over that time frame, we could potentially see prices for 2 and 3 bedroom flats ascending more extremely given the increase demand. However, the demand seems to be equally balanced between all sizes. We should also not be surprised to see generally higher prices in San Francisco compared to other cities in the Bay Area. This is most likely a result of the popularity of the city for foreigners and the limited space available for additional housing, among others. By observing the price line charts for all cities in the Bay Area, we can see that all have experienced a rise in prices between 2000 and 2018. A natural increase over time is to be expected, given inflation. However we see more pronounced increases in some areas versus others, the reasons for which could be further investigated. An example would be Palo Alto, which is of course known for the Stanford Campus. Last but not least, the dip in 2008/2009 is worth mentioning. This is most likely a result of the financial crisis during that time. The difference in the gravity of the dip between cities provides some intriguing insights.</p>
+<p>Create a graph that calculates the cumulative % change for 0-, 1-1, and 2-bed flats between 2000 and 2018 for the top twelve cities in Bay Area, by number of ads that appeared in Craigslist.</p>
+<pre class="r"><code>rent %&gt;% 
+  filter(beds %in% c(0,1,2),
+         city %in% top_cities$city) %&gt;% 
+  # Fielter out the right city with right number of beds
+  group_by(city,beds,year) %&gt;% 
+  arrange(year) %&gt;% 
+  summarize(median_price=median(price))%&gt;% 
+  # calculate the median price in each year in each group
+  ungroup %&gt;% 
+  group_by(city,beds) %&gt;% 
+  mutate(initial_price=dplyr::first(na.omit(median_price))) %&gt;% 
+  # Find the initial value (price in 2000) for each group(city:beds)
+  mutate(cumulative_change=median_price/initial_price) %&gt;%
+  # cumulative change = current price / initial price
+  ggplot(aes(x=year,y=cumulative_change,color=city))+
+  geom_line()+
+  facet_grid(beds~city,scales = &quot;free_y&quot;)+ # facet by beds and city in grid
+  scale_y_continuous(labels=scales::percent)+ 
+  # change the y-axis lable into percentage
+  theme_bw()+
+  theme(axis.text.x = element_text(vjust = 0.5, hjust=1,angle =90))+
+  theme(plot.title.position = &quot;plot&quot;)+
+  labs(title = &quot;Cumulative  % change in 0,1,2-beds rentals in Bay Area&quot;,subtitle=&quot;2000-2018&quot;,x=NULL,y=NULL)+
+  theme(legend.position  = &quot;none&quot;)</code></pre>
+<p><img src="/blogs/homework1_group8_files/figure-html/challenge1-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
