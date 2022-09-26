@@ -3,13 +3,13 @@ categories:
 - ""    #the front matter should be like the one found in, e.g., blog2.md. It cannot be like the normal Rmd we used
 - ""
 date: "2022-09-14"
-description: Brexit and GDP Analysis   # the title that will show up once someone gets to this page
+description: Dplyr and Visualization in R   # the title that will show up once someone gets to this page
 draft: false
 image: brexit.jpg # save picture in \static\img\blogs. Acceptable formats= jpg, jpeg, or png . Your iPhone pics wont work
 
 keywords: ""
 slug: proj2 # slug is the shorthand URL address... no spaces plz
-title: Brexit and GDP Analysis
+title: Dplyr and Visualization
 ---
 
 ```{r, setup, echo=FALSE}
@@ -41,6 +41,16 @@ library(broom)
 library(tidyquant)
 library(infer)
 library(openintro)
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(here)
+library(skimr)
+library(janitor)
+library(vroom)
+library(tidyquant)
+library(dplyr)
+library(ggplot2)
 ```
 
 ## Brexit plot
@@ -184,3 +194,125 @@ The first thing that becomes apparent is that India has visibly lower government
 The USA also displayed a shift of components, however here it concerns government expenditure and capital formation. The shift might be attributed largely to the government adapting their spending policy, investing more heavily in infrastructure and military machinery than intangible benefits for the public. As we can also see, the USA is the only country for which the proportion of household expenditure follows has a positive slope. With the simultaneously increasing trade deficit, we can assume that US citizens increased their spending of foreign goods. This could be related to improving trade routes with China and Europe, as well as the rise of eCommerce in the later years. Of course, we also see a significant drop in gross capital formation around the time of the 2008 financial crisis, which also seems to have affected imports.
 
 Last but not least, let us look at Germany. Looking at the visualization of the data, we see the most stable distribution of GDP components over the years between the three countries. Germany has been able to reliably maintain a trade surplus over most years. Especially since 2000, trade seems to have become more central to Germany´s GDP. Such an observation is not entirely surprising, giving that Germany has a strong footing in most large sectors (e.g. agriculture, pharma) and enjoys strong demand for its machinery and vehicles. Meanwhile, household expenditure contributes less to the GDP than observed in the other countries. This does not mean that Germans spend less, but that the GDP of Germany is just more evenly distributed between its components.
+
+# Rents in San Francsisco 2000-2018
+
+```{r}
+# download directly off tidytuesdaygithub repo
+
+rent <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-07-05/rent.csv')
+
+```
+
+The data is separated into both characters and numbers. At first look, the data types seem to be correctly allocated given the nature of the variables. As for completeness, the most missing value is the description with 197,542 missing. However, details and location (address and coordinates) are closely behind. This is not very surprising, as people are both careful with publishing addresses on craigslist and lazy in writing detailed descriptions.
+
+```{r skim_rents_data}
+# Inspect the rent data
+skimr::skim(rent)
+
+```
+
+Make a plot that shows the top 20 cities in terms of % of classifieds between 2000-2018. You need to calculate the number of listings by city, and then convert that number to a %.
+
+
+```{r plot_top_cities}
+# Group by city and count
+rent %>%
+  group_by(city) %>% 
+  count() %>% 
+  # count the rows with in a group and returns a new column n
+  ungroup %>% 
+  mutate(pct_city = n/sum(n)) %>% 
+  # divided each group's number of rentals by the total amount(sum of all groups)
+  slice_max(order_by=pct_city, n=20) %>% 
+  ggplot(aes(x=pct_city,y=fct_reorder(city,pct_city))) + 
+    geom_col()+
+    labs(title="San Francisco accounts for more than a quarter of all rental classifieds",subtitle ="% of Craigslist listings, 2000-2018",x=NULL,y=NULL,caption = "Source: Pennington, Kate (2018). Bay Area Craigslist Rental Housing Posts,2010-2018")+
+    theme_bw()+
+    theme(panel.border = element_blank()) +
+    theme(plot.title.position = "plot")+
+    scale_x_continuous(labels = scales::percent) #Transform the x-axis label into percentage
+```
+
+Make a plot that shows the evolution of median prices in San Francisco for 0, 1, 2, and 3 bedrooms listings.
+
+```{r sf_median_prices}
+
+rent %>% 
+  filter(city=="san francisco", beds %in% 0:3) %>% 
+  group_by(beds,year) %>%
+  summarize(median_price=median(price)) %>% 
+  ggplot(aes(x=year,y=median_price,colour=factor(beds)))+
+  geom_line()+
+  labs(title="San Francisco rents have been steadily increasing",subtitle = "0 to 3-bed listings,  2000-2018",x=NULL,y=NULL,caption = "Source: Pennington, Kate (2018). Bay Area Craigslist Rental Housing Posts,2010-2018")+
+  facet_wrap(~beds,nrow=1)+ #facet beds
+  theme_bw()+ # change the theme as black-white
+  theme(plot.title.position = "plot")+
+  theme(legend.position = "none")+ # hide the legends
+  scale_color_manual(values = c("red","green","blue","purple"))
+
+```
+
+Finally, make a plot that shows median rental prices for the top 12 cities in the Bay area.
+
+```{r spirit_plot}
+# find the top 12 cities 
+top_cities = rent %>%
+  group_by(city) %>% 
+  count() %>% 
+  ungroup %>% 
+  mutate(percent = n/sum(n)) %>% 
+  slice_max(order_by=percent, n=12)
+
+rent %>% 
+  filter(beds==1,  
+         city %in%  top_cities$city) %>% #filter out the cities with 1 bed 
+  group_by(city,year) %>% 
+  summarize(median_price=median(price)) %>% 
+  ggplot(aes(x=year,y=median_price,colour=city))+
+  geom_line()+
+  facet_wrap(~city,nrow=3)+
+  theme_bw()+
+  theme(plot.title.position = "plot")+
+  labs(title="Rental prices for 1-bedroom flats in the Bay Area",x=NULL,y=NULL,caption = "Source: Pennington, Kate (2018). Bay Area Craigslist Rental Housing Posts, 2010-2018")+
+  theme(legend.position = "none")# hide the legend
+```
+
+First of all, San Francisco has the most listings among all the cities it the Bay Area. The reason behind this could be that San Francisco has a booming economy and is a popular location for large companies, such as Uber or Twitter. These companies recruit a lot outside of San Francisco, leading to a large influx in individuals requiring local accommodation. As the demand is high, supply follows suit. Smaller towns like Redwood City have low population and don't draw nearly as many foreign settlers. Therefore, the number of listings is comparatively lower.
+
+The increase in rental prices between 2000 and 2018 in San Francisco is proportionally approximately the same between 0 to 3 bed listings. If there was a larger increase in families over that time frame, we could potentially see prices for 2 and 3 bedroom flats ascending more extremely given the increase demand. However, the demand seems to be equally balanced between all sizes. We should also not be surprised to see generally higher prices in San Francisco compared to other cities in the Bay Area. This is most likely a result of the popularity of the city for foreigners and the limited space available for additional housing, among others. By observing the price line charts for all cities in the Bay Area, we can see that all have experienced a rise in prices between 2000 and 2018. A natural increase over time is to be expected, given inflation. However we see more pronounced increases in some areas versus others, the reasons for which could be further investigated. An example would be Palo Alto, which is of course known for the Stanford Campus. Last but not least, the dip in 2008/2009 is worth mentioning. This is most likely a result of the financial crisis during that time. The difference in the gravity of the dip between cities provides some intriguing insights.
+
+Create a graph that calculates the cumulative % change for 0-, 1-1, and 2-bed flats between 2000 and 2018 for the top twelve cities in Bay Area, by number of ads that appeared in Craigslist.
+
+```{r challenge1, out.width="100%"}
+
+rent %>% 
+  filter(beds %in% c(0,1,2),
+         city %in% top_cities$city) %>% 
+  # Fielter out the right city with right number of beds
+  group_by(city,beds,year) %>% 
+  arrange(year) %>% 
+  summarize(median_price=median(price))%>% 
+  # calculate the median price in each year in each group
+  ungroup %>% 
+  group_by(city,beds) %>% 
+  mutate(initial_price=dplyr::first(na.omit(median_price))) %>% 
+  # Find the initial value (price in 2000) for each group(city:beds)
+  mutate(cumulative_change=median_price/initial_price) %>%
+  # cumulative change = current price / initial price
+  ggplot(aes(x=year,y=cumulative_change,color=city))+
+  geom_line()+
+  facet_grid(beds~city,scales = "free_y")+ # facet by beds and city in grid
+  scale_y_continuous(labels=scales::percent)+ 
+  # change the y-axis lable into percentage
+  theme_bw()+
+  theme(axis.text.x = element_text(vjust = 0.5, hjust=1,angle =90))+
+  theme(plot.title.position = "plot")+
+  labs(title = "Cumulative  % change in 0,1,2-beds rentals in Bay Area",subtitle="2000-2018",x=NULL,y=NULL)+
+  theme(legend.position  = "none")
+
+
+
+```
+
+

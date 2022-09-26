@@ -90,18 +90,18 @@ params:
         url: blogs/weibo
       - image: brexit.jpg
 #       subtitle: Lorem Etiam Nullam
-        title: Brexit and GDP components Analysis
+        title: Dplyr and Visualization in R
         url: blogs/proj2
-      - image: data.jpg
+#      - image: data.jpg
 #       subtitle: Lorem Etiam Nullam
-        title: SF-Rentals Analysis
-        url: blogs/proj1
+#        title: SF-Rentals Analysis
+#        url: blogs/proj1
       - image: store.jpg
 #       subtitle: Lorem Etiam Nullam
         title: Store Sales Analysis
         url: blogs/store
   two:
-    buttonText: Go to MY BLOGS
+    buttonText: More Projects? Just Click Here
     enable: yes
     #subtitle: "N/A"
     title: YOU HIT THE BOTTOM
