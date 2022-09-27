@@ -84,22 +84,23 @@ params:
 #        subtitle: Feugiat Amet Tempus
         title: My Career Narrative
         url: blogs/wk
-      - image: weibo.jpg
-#       subtitle: Lorem Etiam Nullam
-        title: Sentiment Analysis
-        url: blogs/weibo
       - image: brexit.jpg
 #       subtitle: Lorem Etiam Nullam
         title: Dplyr and Visualization in R
         url: blogs/proj2
+      - image: store.jpg
+#       subtitle: Lorem Etiam Nullam
+        title: ML model to predict future offtake
+        url: blogs/danone
+      - image: weibo.jpg
+#       subtitle: Lorem Etiam Nullam
+        title: Sentiment Analysis
+        url: blogs/weibo
 #      - image: data.jpg
 #       subtitle: Lorem Etiam Nullam
 #        title: SF-Rentals Analysis
 #        url: blogs/proj1
-      - image: store.jpg
-#       subtitle: Lorem Etiam Nullam
-        title: Store Sales Analysis
-        url: blogs/store
+      
   two:
     buttonText: More Projects? Just Click Here
     enable: yes
