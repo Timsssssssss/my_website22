@@ -7,10 +7,10 @@ disqusShortname: ''
 params:
   banner:
     buttonText: Get Started
-#    subtitle: |-
-#      A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP
+    subtitle: |-
+      Know more about me and my past projects
 #      AND RELEASED UNDER THE CREATIVE COMMONS.
-    title: Hi! I'm Tianyi @LONDON BUSINESS SCHOOL
+    title: Hi! I'm Tianyi
   blog: {}
   contact:
     address:
@@ -78,24 +78,24 @@ params:
     showcase:
       - image: lbs.jpg
 #        subtitle: Ipsum Dolor Sit Amet
-        title: Academic Background
+        title: Several Facts About Me
         url: blogs/ab
       - image: pic02.jpg
 #        subtitle: Feugiat Amet Tempus
         title: My Career Narrative
         url: blogs/wk
-      - image: brexit.jpg
-#       subtitle: Lorem Etiam Nullam
-        title: Dplyr and Visualization in R
-        url: blogs/proj2
-      - image: store.jpg
-#       subtitle: Lorem Etiam Nullam
-        title: ML model to predict future offtake
-        url: blogs/danone
       - image: weibo.jpg
 #       subtitle: Lorem Etiam Nullam
         title: Sentiment Analysis
         url: blogs/weibo
+      - image: store.jpg
+#       subtitle: Lorem Etiam Nullam
+        title: ML Model to Predict Future Offtake
+        url: blogs/danone
+      - image: brexit.jpg
+#       subtitle: Lorem Etiam Nullam
+        title: Dplyr and Visualization in R
+        url: blogs/proj2
 #      - image: data.jpg
 #       subtitle: Lorem Etiam Nullam
 #        title: SF-Rentals Analysis

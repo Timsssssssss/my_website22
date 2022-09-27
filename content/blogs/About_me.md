@@ -3,12 +3,12 @@ categories:
 - ""
 - ""
 date: "2017-10-31T22:42:51-05:00"
-description: Academic Background
+description: 
 draft: false
-image: lbs.jpg
+image:
 keywords: ""
 slug: ab
-title: Academic Background
+title: Several Facts About Me
 ---
 ## London Business School
 - Masters in Analytics and Management
