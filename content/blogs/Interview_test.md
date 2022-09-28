@@ -5,7 +5,7 @@ categories:
 date: "2017-10-31T22:26:13-05:00"
 description: 
 draft: false
-image: store.jpg
+image: ""
 keywords: ""
 slug: danone
 title: ML model to predict future offtake
