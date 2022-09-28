@@ -11,7 +11,6 @@ keywords: ""
 slug: proj2 # slug is the shorthand URL address... no spaces plz
 title: Dplyr and Visualization
 ---
-
 ```{r, setup, echo=FALSE}
 knitr::opts_chunk$set(
   message = FALSE, 
@@ -52,9 +51,7 @@ library(tidyquant)
 library(dplyr)
 library(ggplot2)
 ```
-
 ## Brexit plot
-
 ```{r import_brexit}
 brexit <- read_csv("https://raw.githubusercontent.com/kostis-christodoulou/am01/master/data/brexit_results.csv")
 ```

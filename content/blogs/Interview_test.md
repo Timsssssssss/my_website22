@@ -13,9 +13,7 @@ editor_options:
   markdown: 
     wrap: 72
 ---
-
 # Introduction
-
 This is the analysis I did for a part of the interview when I applied
 Danone, I submitted this analysis with in 24 hours.
 
@@ -43,7 +41,6 @@ df= pd.read_csv(filepath_or_buffer ='interview_test.csv')
 ```
 
 # EDA
-
 <font  size=4>
 
 Firstly, take a look at the total sales of brand A and brand B from 2015

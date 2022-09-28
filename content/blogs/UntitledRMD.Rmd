@@ -31,11 +31,9 @@ knitr::opts_chunk$set(
 ```
 
 # Football
-
 Football is a part of my life, I started to watch football since I was 8 and started to play from middle school. I also dedicated myself to contributing to the community as the president of football club both in High School and University.
 
 ## As a player
-
 I was the player of the school team both in high school and university. It's a great experience that I can meet a group of people within my age who share the same passion with me. We trained hard together and played football every week. Although we were not the strongest team and did not always win tournaments, we had a great time together. Through playing football, I learnt how to be a team player through teamwork, being supportive and diligency.
 
 <center>*My team in high school and college*</center>
@@ -52,7 +50,6 @@ knitr::include_graphics("/ab/shampoo.jpg",error=FALSE)
 ```
 
 ## As one of the lovers
-
 I joined the Sports Department under Student Association in high school and became the president in my senior year. I was responsible for writing proposal and organizing sports matches such as football, basketball and table tennis within the grade.
 
 ```{r, echo = FALSE,out.width = "1000px"}
@@ -78,7 +75,6 @@ knitr::include_graphics("/ab/girl.jpg",error=FALSE)
 ```
 
 # Diversity
-
 Back in high school, I attended the World School Sport Educational Game held in Greece, where I met students from other countries such as England, Italy, and Brazil. We lived together for two weeks and soon became friends through games and discussions. It was the first time that I had lived in an international community.
 
 ```{r, echo = FALSE,out.width = "1000px"}
