@@ -5,7 +5,7 @@ categories:
 date: "2017-10-31T22:26:13-05:00"
 description: 
 draft: false
-image: pic02.jpg
+image: ""
 keywords: ""
 slug: wk
 title: My Career Narrative
@@ -21,4 +21,4 @@ Therefore, I chose Statistics as my major during my undergraduate study. In the 
 
 At Danone as an advanced-analytics intern, I got the chance to solve business problems with data. The team was developing a machine learning model to predict future offtakes. It was not only a technical problem, but also a business problem. Despite of tuning parameters and designing algorithms, we also tried to improve the model from the business prospective. We identified and verified factors which affected sales and put them in the model. Through this experience, I not only learnt how to integrate data with business, but more importantly, immersed in the business context and gained business acumen. 
 
-At the beginning of 2022, I joined GrothBox, a start-up company which focused on studying and solving business growth related problems. This work helped me dig deeper in business. My first research project started with the ![digital transformation of L'Oreal](https://mp.weixin.qq.com/s/DQMCA4JE3KQpGp68E7I77Q)
+At the beginning of 2022, I joined GrothBox, a start-up company which focused on studying and solving business growth related problems. This work helped me dig deeper in business. My first research project started with the [digital transformation of L'Oreal](https://mp.weixin.qq.com/s/DQMCA4JE3KQpGp68E7I77Q)
