@@ -84,14 +84,14 @@ params:
 #        subtitle: Feugiat Amet Tempus
         title: My Career Narrative
         url: blogs/wk
-      - image: weibo.jpg
-#       subtitle: Lorem Etiam Nullam
-        title: Sentiment Analysis
-        url: blogs/weibo
       - image: store.jpg
 #       subtitle: Lorem Etiam Nullam
         title: ML Model to Predict Future Offtake
         url: blogs/danone
+      - image: weibo.jpg
+#       subtitle: Lorem Etiam Nullam
+        title: Sentiment Analysis
+        url: blogs/weibo
       - image: brexit.jpg
 #       subtitle: Lorem Etiam Nullam
         title: Dplyr and Visualization in R
