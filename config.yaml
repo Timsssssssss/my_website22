@@ -101,9 +101,9 @@ params:
 #        title: SF-Rentals Analysis
 #        url: blogs/proj1
       
-  two:
-    buttonText: More Projects? Just Click Here
-    enable: yes
-    #subtitle: "N/A"
-    title: YOU HIT THE BOTTOM
-    url: blogs
+#  two:
+#    buttonText: More Projects? Just Click Here
+#    enable: yes
+#    #subtitle: "N/A"
+#    title: YOU HIT THE BOTTOM
+#    url: blogs
