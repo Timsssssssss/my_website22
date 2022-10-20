@@ -88,6 +88,10 @@ params:
 #       subtitle: Lorem Etiam Nullam
         title: ML Model to Predict Future Offtake
         url: blogs/danone
+      - image: lend.jpg
+#       subtitle: Lorem Etiam Nullam
+        title: Regression Models to Predict Interest Rate
+        url: blogs/lend 
       - image: weibo.jpg
 #       subtitle: Lorem Etiam Nullam
         title: Sentiment Analysis
